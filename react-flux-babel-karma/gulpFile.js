@@ -83,7 +83,7 @@ gulp.task('archive', function () {
     return 'node_modules/' + name + '/**';
   });
 
-  return gulp.src(['package.json','bin/www','dist/**'].concat(nodeModulePaths), {base: "."})
+  return gulp.src(['package.json','index.js','dist/**'].concat(nodeModulePaths), {base: "."})
              .pipe(zip('archive.zip'))
              .pipe(gulp.dest('.'));
 });
