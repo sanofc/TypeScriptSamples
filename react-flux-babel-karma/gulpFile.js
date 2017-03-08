@@ -4,11 +4,14 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var eslint = require('gulp-eslint');
+var zip  = require('gulp-zip');
+var path = require('path');
 var webpack = require('./gulp/webpack');
 var staticFiles = require('./gulp/staticFiles');
 var tests = require('./gulp/tests');
 var clean = require('./gulp/clean');
 var inject = require('./gulp/inject');
+var packageJson = require('./package.json');
 
 var lintSrcs = ['./gulp/**/*.js'];
 
@@ -63,4 +66,24 @@ gulp.task('watch-and-serve', ['watch'], function() {
 
   app.use(express.static('dist', {'index': 'index.html'}))
   app.listen(8080);
+});
+
+gulp.task('start', function() {
+  // local as not required for build
+  var express = require('express')
+  var app = express()
+
+  app.use(express.static('dist', {'index': 'index.html'}))
+  app.listen(8080);
+});
+
+
+gulp.task('archive', function () {
+  var nodeModulePaths = Object.keys(packageJson['dependencies']).map(function(name) {
+    return 'node_modules/' + name + '/**';
+  });
+
+  return gulp.src(['package.json','bin/www','dist/**'].concat(nodeModulePaths), {base: "."})
+             .pipe(zip('archive.zip'))
+             .pipe(gulp.dest('.'));
 });
