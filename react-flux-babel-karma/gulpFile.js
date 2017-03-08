@@ -68,16 +68,6 @@ gulp.task('watch-and-serve', ['watch'], function() {
   app.listen(8080);
 });
 
-gulp.task('start', function() {
-  // local as not required for build
-  var express = require('express')
-  var app = express()
-
-  app.use(express.static('dist', {'index': 'index.html'}))
-  app.listen(8080);
-});
-
-
 gulp.task('archive', function () {
   var nodeModulePaths = Object.keys(packageJson['dependencies']).map(function(name) {
     return 'node_modules/' + name + '/**';
